@@ -1,1 +1,1 @@
-# CAT-Citation-Assistive-Tool-
+# CAT-Citation-Assistive-Tool
