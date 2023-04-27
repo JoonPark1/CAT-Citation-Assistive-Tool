@@ -11,8 +11,14 @@ domain,topic = contents
 resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&q={topic}&siteSearch={domain}", verify=False)
 body = resp.json()
 searchResults = body["items"]
+#array of links 
+links = [] 
 for item in body["items"]:
-    print("item: ", item)
+    links.append(item["link"])
+
+#for each link, resolve it to get web html doc and parse it using beautifulSoup module! 
+for link in links: 
+    
 
 
 
