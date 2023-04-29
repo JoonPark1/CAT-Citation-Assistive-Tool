@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 sys.path.append("/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages")
 from userprompt import main
 from datetime import datetime 
-from dateutil.relativedelta import relativedelta
+
 
 contents = main()
 #might be useful to destructure contents array to variables that have well-defined names so it's clear! 
