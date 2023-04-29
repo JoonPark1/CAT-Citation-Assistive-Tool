@@ -4,8 +4,13 @@ from bs4 import BeautifulSoup
 sys.path.append("/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages")
 from userprompt import main
 from datetime import datetime 
+import openai
+import os 
+from decouple import config
 
-
+#read in env. variable values! 
+openai.api_key = config("openai.api_key")
+model_engine = config("model_engine") 
 contents = main()
 #might be useful to destructure contents array to variables that have well-defined names so it's clear! 
 domain,topic = contents 
@@ -28,7 +33,29 @@ all_p_tags = soup.find_all("p")
 # print("all_p_tags: ", all_p_tags)
 p_arr = [t.string for t in all_p_tags if type(t) is not None and type(t.string) is not None]
 p_arr = list(filter(lambda x: x != None, p_arr))
-print("p_arr: ", p_arr)
+
+prompt="Please provide a summary on the following text: "
+overall_p = "" 
+for e in p_arr:
+    overall_p += e 
+prompt += overall_p[:50] 
+
+# response = openai.Completion.create(engine=model_engine, max_tokens=1000, prompt=prompt)
+
+# print(response)
+
+response = openai.ChatCompletion.create(
+    model = model_engine,
+    messages = [
+        {"role": "system", "content": "chat"},
+        {"role": "user", "content": "What is " + topic},
+    ],
+    max_tokens = 3900
+)
+print(response)
+# print("Here is the web info: ", p_arr)
+
+
 
 
 
