@@ -29,6 +29,7 @@ link_resp = requests.get(links[0])
 html_content = link_resp.text
 #create soup instance!
 soup = BeautifulSoup(html_content, "html.parser")
+print("----------------here is the web info--------", soup)
 all_p_tags = soup.find_all("p")
 # print("all_p_tags: ", all_p_tags)
 p_arr = [t.string for t in all_p_tags if type(t) is not None and type(t.string) is not None]
@@ -38,7 +39,7 @@ prompt="Please provide a summary on the following text: "
 overall_p = "" 
 for e in p_arr:
     overall_p += e 
-prompt += overall_p[:50] 
+prompt += overall_p[:50]
 
 # response = openai.Completion.create(engine=model_engine, max_tokens=1000, prompt=prompt)
 
@@ -48,7 +49,7 @@ response = openai.ChatCompletion.create(
     model = model_engine,
     messages = [
         {"role": "system", "content": "chat"},
-        {"role": "user", "content": "What is " + topic},
+        {"role": "user", "content": "What is " + prompt},
     ],
     max_tokens = 3900
 )
