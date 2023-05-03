@@ -85,7 +85,7 @@ def generate_response(in_prompt):
     )
 
     #output response
-    return response
+    return response['choices'][0]['message']['content']
     # print("Here is the web info: ", p_arr)
 
 app = Flask(__name__)
