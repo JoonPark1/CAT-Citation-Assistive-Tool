@@ -55,7 +55,7 @@ def generate_response(in_prompt):
             a.extract()
         texts = soup.findAll(text=True)
         visible_texts = filter(tag_visible, texts)  
-        return u" ".join(t.strip() for t in visible_texts)
+        return " ".join(t.strip() for t in visible_texts)
 
     formatted=text_from_html(html_content)
     formatted = formatted[:5000]
@@ -79,7 +79,7 @@ def generate_response(in_prompt):
         model = model_engine,
         messages = [
             {"role": "system", "content": "chat"},
-            {"role": "user", "content": "What is " + prompt},
+            {"role": "user", "content": prompt},
         ],
         max_tokens = 2000
     )
