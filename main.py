@@ -70,7 +70,7 @@ def generate_response(in_prompt):
     # for e in p_arr:
     #     overall_p += e
     # prompt += overall_p[:50]
-    prompt = "The following text is all of the text on a website including things that are not important. Please summarize the most crucial and core parts of this content: "
+    prompt = "The following text is all of the text on a website including things that are not important. Please summarize in about 500 words the most crucial and core parts of this content: "
     prompt += formatted
 
     #retrieve response
