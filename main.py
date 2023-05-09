@@ -41,7 +41,26 @@ def generate_response(in_prompt, domain):
     #might be useful to destructure contents array to variables that have well-defined names so it's clear! 
     # domain,topic = contents 
     topic=in_prompt
-    resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&siteSearch={domain}", verify=False)
+    html = None 
+    with open("./templates/index.html", 'r') as html_file:
+        html= html_file.read() 
+    soupInstance = BeautifulSoup(html, "html.parser")
+    select_tag = soupInstance.find('select', {'name': "Advanced Options"})
+    earliest_date_tag = select_tag.find('option', {'name': "earliest_date"})
+    earliest_date = earliest_date_tag['value']
+    print("earliest_date: ", earliest_date)
+    latest_date_tag = select_tag.find('option', { 'name' : "latest_date"})
+    latest_date = latest_date_tag['value']
+    print("latest_date: ", latest_date)
+    resp = None 
+    if earliest_date and latest_date:
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_qdr=&as_nlo={earliest_date}&as_nhi={latest_date}&siteSearch={domain}", verify=False)
+    elif earliest_date: 
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_qdr=&as_nlo={earliest_date}&siteSearch={domain}", verify=False)
+    elif latest_date:
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_qdr=&as_nhi={latest_date}&siteSearch={domain}", verify=False)
+    else: 
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&siteSearch={domain}", verify=False)
     body = resp.json()
     searchResults = body["items"]
 
@@ -82,6 +101,9 @@ def generate_response(in_prompt, domain):
             considered.add(link)
             counter += 1 
             links_list.append([link, response['choices'][0]['message']['content']])
+
+            print("earliest_date: ", earliest_date)
+            print("latest_date: ", latest_date)
     return links_list
 
 app = Flask(__name__)

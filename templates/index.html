@@ -11,6 +11,15 @@
     <input type="text" name ='content' id="'contnent">
     <p>Domains you only allow for(Default is .com): </p>
     <input type="text" name = "domain" id="domain"> 
+    <label for="Advanced Options"> Advanced Options for Sources:</label>
+    <select name="Advanced Options" id="Advanced Options">
+        <option value = "select option" value = "date specified">-- Select a date --</option>
+        <option name = "earliest_date" value="earliest date allowed">Earliest Date Allowed</option>
+        <option name = "latest_date" value="latest date allowed">Latest Date Allowed</option>
+        <!-- <input type="text" name="text_box" value="date specified"></input> -->
+        <!-- <option name = "latest_date" value="latest date allowed">Latest Date Allowed</option> -->
+        <!-- <input type="text" name="latest_date_text"></input> -->
+    </select>
     <input type="submit" valuer="Add Task">
 </form>
 <h4>Look for the output below...</h4>
@@ -21,3 +30,13 @@
 <h5> {{link3}}</h5>
 <p>{{link3_text}}</p>
 {% endblock %}
+
+<br /> <br />
+<button onclick="show();">Show selected value</button>
+
+<script>
+  let show = () => {
+     let element = document.getElementById("Advanced Options");
+     alert("Value = " + element.value);
+  }
+</script>
