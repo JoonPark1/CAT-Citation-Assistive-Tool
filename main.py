@@ -56,17 +56,17 @@ def generate_response(in_prompt, domain):
     considered = set() 
     length = len(links)
     counter = 0 
-    output_string = "" 
+    links_list = []
     while True:
         cur = random.randint(0, length-1)
         link = links[cur]
         if counter == 3:
             break 
         if link not in considered: 
-            print("link: ", link)
-            link_resp = requests.get(link)
+            USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
+            headers = {"user-agent": USER_AGENT}
+            link_resp = requests.get(link, headers = headers)
             html_content = link_resp.text
-            #print("html_content: ", html_content)
             formatted= text_from_html(html_content)
             formatted = formatted[:5000]
             prompt = "The following text is all of the text on a website including things that are not important. Please summarize the most crucial and core parts of this content: "
@@ -79,14 +79,10 @@ def generate_response(in_prompt, domain):
                 ],
                 max_tokens = 2000
             )
-            #output response
-            print("Start!\n")
-            print(response['choices'][0]['message']['content'])
-            print("End!\n")
             considered.add(link)
             counter += 1 
-            output_string += (response['choices'][0]['message']['content']) 
-    return output_string
+            links_list.append([link, response['choices'][0]['message']['content']])
+    return links_list
 
 app = Flask(__name__)
 @app.route('/', methods=['POST', 'GET'])
@@ -94,9 +90,9 @@ def index():
     if request.method == 'POST':
         task_content= request.form['content']
         domain = request.form['domain']
-        print("domain: ", domain)
-        prompt_out = generate_response(task_content, domain)
-        return render_template('index.html',fin_out=prompt_out)
+        array = generate_response(task_content, domain)
+        return render_template('index.html', link1 = array[0][0], link1_text=array[0][1], link2 = array[1][0], link2_text = array[1][1], 
+                               link3 = array[2][0], link3_text = array[2][1])
     else:
         return render_template('index.html')
 
