@@ -10,6 +10,8 @@ import openai
 import os 
 from decouple import config
 from flask import Flask, render_template, url_for, request, redirect
+ 
+os.environ['REQUESTS_CA_BUNDLE'] = './root-ca.cer'
 
 def generate_response(in_prompt):
     #read in env. variable values! 
@@ -33,7 +35,7 @@ def generate_response(in_prompt):
     #for each link, resolve it to get web html doc and parse it using beautifulSoup module! 
     #for link in links: 
         #resolve link
-    link_resp = requests.get(links[0])
+    link_resp = requests.get(links[0], verify=False)
     html_content = link_resp.text
 
     #define parsing functions
