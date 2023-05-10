@@ -46,12 +46,17 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
     print("latest_date_text: ", latest_date) 
     resp = None 
     if earliest_date and latest_date:
-        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_eq={'before:' + earliest_date + ' after:' + latest_date}&siteSearch={domain}", verify=False)
+        print("get to url with both dates called!")
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={earliest_date + ':' + latest_date}&siteSearch={domain}", verify=False)
     elif earliest_date: 
-        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_eq={'before:' + earliest_date}&siteSearch={domain}", verify=False)
+        print("get to url with jsut earliest date called!")
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={earliest_date + ':'}&siteSearch={domain}", verify=False)
     elif latest_date:
-        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_eq={'after:' + latest_date}&siteSearch={domain}", verify=False)
+        print("get to url with just latest date called!")
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={latest_date+':'}&siteSearch={domain}", verify=False)
+        print(resp.headers["Last Modified"])
     else: 
+        print("normal get url called!")
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&siteSearch={domain}", verify=False)
     body = resp.json()
     searchResults = body["items"]
