@@ -1,15 +1,50 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<h2>Welcome to CAT! The Citation Accuracy Tool.</h2>
+<h2>Welcome to CAT! The ChatGPT Assistive Tool.</h2>
 <p>Please input your prompt below to recieve accurate and reliable information on any topic of your choice.</p>
 {% endblock %}
-
 {% block body %}
 <form action="/" method="POST">
+    <p>Topic: </p>
     <input type="text" name ='content' id="'contnent">
-    <input type="submit" valuer="Add Task">
+    <p>Domains you only allow for(Default is .com): </p>
+    <input type="text" name = "domain" id="domain"> 
+    <label for="Advanced Options"> Advanced Options for Sources:</label>
+    <select name="Advanced Options" id="Advanced Options">
+        <option value = "select option" value = "date specified">-- Select a date --</option>
+        <option value = "earliest_date">earliest_date</option>
+        <option value = "latest_date">latest_date</option>
+    </select>
+    <!--Initially hide the two text div input fields unless it's selected by user!-->
+    <div id="earliest_date_input" style="display:none">
+      <label for="earliest_date_text">Enter earliest date you allow for source:(YYYY-MM-DD format)</label>
+      <input name = "earliest_date_text" value = '' type="text" id="earliest_date_text">
+    </div>
+
+    <div id="latest_date_input" style="display:none">
+      <label for="latest_date_text">Enter latest date you allow for source:(YYYY-MM-DD format)</label>
+      <input name = "latest_date_text" value = '' type="text" id="latest_date_text">
+    </div>
+    <input id = "submit" type="submit" valuer="Add Task">
+    <script>
+      var selectTag = document.getElementById("Advanced Options");
+      selectTag.addEventListener("change", (event) => {   
+            var optionSelected = event.target.value;
+            var currentInputDiv = document.getElementById(optionSelected + "_input"); 
+            //make the selected option's corresponding input div show up! 
+            currentInputDiv.style.display = 'block'; 
+      }); 
+    </script>
 </form>
 <h4>Look for the output below...</h4>
-<p>{{fin_out}}</p>
+<h5> {{link1}}</h5>
+<p>{{link1_text}}</p>
+<h5> {{link2}}</h5>
+<p>{{link2_text}}</p>
+<h5> {{link3}}</h5>
+<p>{{link3_text}}</p>
 {% endblock %}
+
+<br /> <br />
+<button onclick="show();">Show selected value</button>
