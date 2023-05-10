@@ -47,13 +47,19 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
     resp = None 
     if earliest_date and latest_date:
         print("get to url with both dates called!")
-        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={earliest_date + ':' + latest_date}&siteSearch={domain}", verify=False)
+        phrase = f"Before:{earliest_date} After:{latest_date}" 
+        print("phrase: ", phrase)
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
     elif earliest_date: 
         print("get to url with jsut earliest date called!")
-        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={earliest_date + ':'}&siteSearch={domain}", verify=False)
+        phrase = f"Before:{earliest_date}"
+        print("phrase: ", phrase)
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
     elif latest_date:
         print("get to url with just latest date called!")
-        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={latest_date+':'}&siteSearch={domain}", verify=False)
+        phrase = f"After:{latest_date}:" 
+        print("phrase: ", phrase)
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
         print(resp.headers["Last Modified"])
     else: 
         print("normal get url called!")
@@ -93,7 +99,7 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
                     {"role": "system", "content": "chat"},
                     {"role": "user", "content": prompt},
                 ],
-                max_tokens = 2000
+                max_tokens = 1950
             )
             considered.add(link)
             counter += 1 
