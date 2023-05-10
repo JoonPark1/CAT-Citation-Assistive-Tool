@@ -11,8 +11,12 @@ import openai
 import os 
 from decouple import config
 from flask import Flask, render_template, url_for, request, redirect
+<<<<<<< HEAD
 cert_path = "./root-ca.cer"
 os.environ['REQUESTS_CA_BUNDLE'] = cert_path 
+=======
+
+>>>>>>> de9543d8ba942db035c26f6125938b113b8e18de
 #create soup instance!
 def tag_visible(element):
     if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
@@ -29,10 +33,18 @@ def text_from_html(body):
     visible_texts = filter(tag_visible, texts)  
     return " ".join(t.strip() for t in visible_texts)
 
+<<<<<<< HEAD
 def generate_response(in_prompt, domain, earliest_date, latest_date):
     #read in env. variable values! 
     openai.api_key = config("openai.api_key")
     model_engine = config("model_engine") 
+=======
+def generate_response(in_prompt, domain):
+    #read in env. variable values! 
+    openai.api_key = config("openai.api_key")
+    model_engine = config("model_engine") 
+    # contents = main()
+>>>>>>> de9543d8ba942db035c26f6125938b113b8e18de
     
     #If user don't provide domain, default to .com! 
     if not domain:
@@ -41,6 +53,7 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
     #might be useful to destructure contents array to variables that have well-defined names so it's clear! 
     # domain,topic = contents 
     topic=in_prompt
+<<<<<<< HEAD
     print("earliest_date_text: ", earliest_date)
     print("latest_date_text: ", latest_date) 
     resp = None 
@@ -50,6 +63,26 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_eq={'before:' + earliest_date}&siteSearch={domain}", verify=False)
     elif latest_date:
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_eq={'after:' + latest_date}&siteSearch={domain}", verify=False)
+=======
+    html = None 
+    with open("./templates/index.html", 'r') as html_file:
+        html= html_file.read() 
+    soupInstance = BeautifulSoup(html, "html.parser")
+    select_tag = soupInstance.find('select', {'name': "Advanced Options"})
+    earliest_date_tag = select_tag.find('option', {'name': "earliest_date"})
+    earliest_date = earliest_date_tag['value']
+    print("earliest_date: ", earliest_date)
+    latest_date_tag = select_tag.find('option', { 'name' : "latest_date"})
+    latest_date = latest_date_tag['value']
+    print("latest_date: ", latest_date)
+    resp = None 
+    if earliest_date and latest_date:
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_qdr=&as_nlo={earliest_date}&as_nhi={latest_date}&siteSearch={domain}", verify=False)
+    elif earliest_date: 
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_qdr=&as_nlo={earliest_date}&siteSearch={domain}", verify=False)
+    elif latest_date:
+        resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&as_qdr=&as_nhi={latest_date}&siteSearch={domain}", verify=False)
+>>>>>>> de9543d8ba942db035c26f6125938b113b8e18de
     else: 
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&siteSearch={domain}", verify=False)
     body = resp.json()
@@ -103,13 +136,21 @@ def index():
     if request.method == 'POST':
         task_content= request.form['content']
         domain = request.form['domain']
+<<<<<<< HEAD
         earliest_date = request.form['earliest_date_text'] 
         latest_date = request.form['latest_date_text'] 
         array = generate_response(task_content, domain, earliest_date, latest_date)
+=======
+        array = generate_response(task_content, domain)
+>>>>>>> de9543d8ba942db035c26f6125938b113b8e18de
         return render_template('index.html', link1 = array[0][0], link1_text=array[0][1], link2 = array[1][0], link2_text = array[1][1], 
                                link3 = array[2][0], link3_text = array[2][1])
     else:
         return render_template('index.html')
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     app.run(port=5001, debug=True)
+=======
+    app.run(debug=True)
+>>>>>>> de9543d8ba942db035c26f6125938b113b8e18de
