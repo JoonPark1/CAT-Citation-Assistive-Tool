@@ -11,8 +11,10 @@ import openai
 import os 
 from decouple import config
 from flask import Flask, render_template, url_for, request, redirect
-cert_path = "./root-ca.cer"
+
+cert_path = "./Baltimore CyberTrust Root.cer"
 os.environ['REQUESTS_CA_BUNDLE'] = cert_path 
+
 #create soup instance!
 def tag_visible(element):
     if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
@@ -28,8 +30,6 @@ def text_from_html(body):
     texts = soup.findAll(text=True)
     visible_texts = filter(tag_visible, texts)  
     return " ".join(t.strip() for t in visible_texts)
-
-
 
 def generate_response(in_prompt, domain, earliest_date, latest_date):
     #read in env. variable values! 
@@ -85,9 +85,9 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
         if counter == 3:
             break 
         if link not in considered: 
-            USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
+            USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
             headers = {"user-agent": USER_AGENT}
-            link_resp = requests.get(link, headers = headers)
+            link_resp = requests.get(link, headers = headers, verify = False)
             html_content = link_resp.text
             formatted= text_from_html(html_content)
             formatted = formatted[:5000]
