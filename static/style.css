@@ -24,3 +24,7 @@ body {
 #topic .spec {
 	margin-left: 10px;
 }
+
+p.desc {
+	display: none; 
+}
