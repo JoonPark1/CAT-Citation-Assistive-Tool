@@ -15,11 +15,11 @@ import os
 from decouple import config
 from flask import Flask, render_template, url_for, request, redirect
 
-from sematch.semantic.similarity import WordNetSimilarity
+# from sematch.semantic.similarity import WordNetSimilarity
 
 
 
-cert_path = "./sharat-cert.crt"
+cert_path = "./root-chr.cer"
 
 
 os.environ['REQUESTS_CA_BUNDLE'] = cert_path 
@@ -40,7 +40,7 @@ def text_from_html(body):
     visible_texts = filter(tag_visible, texts)  
     return " ".join(t.strip() for t in visible_texts)
 
-nlp = spacy.load('en_core_web_sm')
+# nlp = spacy.load('en_core_web_sm')
 def check_similarity(token1, token2):
     sim_score = token1.similarity(token2)
     return sim_score 
@@ -140,17 +140,17 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
             counter += 1 
 
             # get similarity score for whole webpage
-            sim_score_total = 0
-            doc = nlp(topic + formatted)
-            topic_token = doc[0]
-            for i in range(1, len(doc)):
-                cur_token = doc[i]
-                sim_score_total += check_similarity(topic_token, cur_token)
-            sim_metric = get_sim_score(sim_score_total, len(doc))
-            links_list.append([link, response['choices'][0]['message']['content'], sim_metric]) 
+            # sim_score_total = 0
+            # doc = nlp(topic + formatted)
+            # topic_token = doc[0]
+            # for i in range(1, len(doc)):
+            #     cur_token = doc[i]
+            #     sim_score_total += check_similarity(topic_token, cur_token)
+            # sim_metric = get_sim_score(sim_score_total, len(doc))
+            links_list.append([link, response['choices'][0]['message']['content']]) 
             print("earliest_date: ", earliest_date)
             print("latest_date: ", latest_date)
-            print("relevancy score:", sim_metric)
+            # print("relevancy score:", sim_metric)
     return links_list
 
 app = Flask(__name__)
@@ -162,8 +162,9 @@ def index():
         earliest_date = request.form['earliest_date_text'] 
         latest_date = request.form['latest_date_text'] 
         array = generate_response(task_content, domain, earliest_date, latest_date)
-        return render_template('index.html', link1 = array[0][0], link1_text=array[0][1], link1_score = array[0][2], link2 = array[1][0], link2_text = array[1][1], 
-                               link2_score = array[1][2], link3 = array[2][0], link3_text = array[2][1], link3_score = array[2][2]) 
+        print("array: ", array)
+        return render_template('index.html', link1 = array[0][0], link1_text=array[0][1], link2 = array[1][0], link2_text = array[1][1], 
+                               link3 = array[2][0], link3_text = array[2][1]) 
     else:
         return render_template('index.html')
 
