@@ -1,27 +1,28 @@
-.header {
-    margin-left: auto;
+body {
+	background-color: rgb(153, 255, 204, 0.6);
 	display: flex;
 	flex-direction: column;
 	text-align: center;
-	height: 280px;
 	justify-content: center;
 	align-items: center;
-	color: white
-}
+  }
 
-.meat {
-    margin-left: auto;
+#domain {
 	display: flex;
-	flex-direction: column;
-	text-align: center;
-	height: 280px;
-	justify-content: center;
-	align-items: center;
-	color: white
+	flex-direction: row;
 }
 
-html {
-	background-color:rgb(52,53,65);
+#domain .spec {
+	margin-left: 10px;
+}
+
+#topic {
+	display: flex;
+	flex-direction: row;
+}
+
+#topic .spec {
+	margin-left: 10px;
 }
 
 p.desc {

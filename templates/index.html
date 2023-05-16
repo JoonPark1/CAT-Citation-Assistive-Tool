@@ -1,15 +1,19 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<h2>Welcome to CAT! The ChatGPT Assistive Tool.</h2>
-<p>Please input your prompt below to recieve accurate and reliable information on any topic of your choice.</p>
 {% endblock %}
 {% block body %}
+<h2>Welcome to CAT! The ChatGPT Assistive Tool.</h2>
+<p>Please input your prompt below to recieve accurate and reliable information on any topic of your choice.</p>
 <form action="/" method="POST">
-    <p>Topic: </p>
-    <input type="text" name ='content' id="'contnent">
-    <p>Domains you only allow for(Default is .com): </p>
-    <input type="text" name = "domain" id="domain"> 
+    <div id="topic">
+      <p>Topic: </p>
+      <input class="spec" type="text" name ='content' id="'contnent">
+    </div>
+    <div id="domain">
+      <p>Domains to include in search: </p>
+      <input class="spec" type="text" name = "domain" id="domain" value=".com"> 
+    </div>
     <label for="Advanced Options"> Advanced Options for Sources:</label>
     <select name="Advanced Options" id="Advanced Options">
         <option value = "select option" value = "date specified">-- Select a date --</option>

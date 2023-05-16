@@ -14,11 +14,14 @@ import openai
 import os 
 from decouple import config
 from flask import Flask, render_template, url_for, request, redirect
+
 from sematch.semantic.similarity import WordNetSimilarity
 
 
 
 cert_path = "./sharat-cert.crt"
+
+
 os.environ['REQUESTS_CA_BUNDLE'] = cert_path 
 
 #create soup instance!
@@ -116,7 +119,9 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
             break 
         if link not in considered: 
             USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+            USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
             headers = {"user-agent": USER_AGENT}
+            link_resp = requests.get(link, headers = headers, verify=False)
             link_resp = requests.get(link, headers = headers, verify=False)
             html_content = link_resp.text
             formatted= text_from_html(html_content)
