@@ -90,7 +90,7 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
         phrase = f"After:{latest_date}:" 
         print("phrase: ", phrase)
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
-        print(resp.headers["Last Modified"])
+        #print(resp.headers["Last Modified"])
     else: 
         print("normal get url called!")
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&siteSearch={domain}", verify=False)
