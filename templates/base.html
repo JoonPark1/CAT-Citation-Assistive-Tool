@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-    <div class="header">
+    <!-- <div class="header">
       {% block head %}{% endblock %}
-    </div>
+    </div> -->
   </head>
   <body>
-    <div class="meat">
-      {% block body %}{% endblock %}
-    </div>
+    {% block body %}{% endblock %}
   </body>
 </html>
  
