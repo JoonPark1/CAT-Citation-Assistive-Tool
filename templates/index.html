@@ -39,6 +39,7 @@
             //make the selected option's corresponding input div show up! 
             currentInputDiv.style.display = 'block'; 
       }); 
+      
     </script>
 
     <script>
@@ -55,8 +56,15 @@
 <h5> {{link3}}</h5>
 <!-- <h6><p class="desc">Relevancy Score: </p>{{link3_score}}</h6> -->
 <p>{{link3_text}}</p>
+
+<h4>Here are some other suggested topics</h4>
+<p>1. {{suggestions[0]}}</p>
+<p>2. {{suggestions[1]}}</p>
+<p>3. {{suggestions[2]}}</p>
+
 {% endblock %}
 <br /> <br />
+
 <!-- <script>
   var flag = link1_score && link2_score && link3_score; 
   if(flag) {

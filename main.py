@@ -65,6 +65,7 @@ def get_sim_score(sim_score, wc):
     return float(sim_score / wc) * 100 
 
 def generate_response(in_prompt, domain, earliest_date, latest_date):
+    ### get suggusted questions
     #read in env. variable values! 
     openai.api_key = config("openai.api_key")
     model_engine = config("model_engine") 
@@ -83,21 +84,26 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
         phrase = f"Before:{earliest_date} After:{latest_date}" 
         # print("phrase: ", phrase)
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
+
     elif earliest_date: 
         # print("get to url with just earliest date called!")
         phrase = f"Before:{earliest_date}"
         # print("phrase: ", phrase)
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
+
+
     elif latest_date:
         # print("get to url with just latest date called!")
         phrase = f"After:{latest_date}:" 
         # print("phrase: ", phrase)
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
         #print(resp.headers["Last Modified"])
+
     else: 
         # print("normal get url called!")
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&siteSearch={domain}", verify=False)
         print("resp: ", resp)
+
     body = resp.json()
     searchResults = body["items"]
 
@@ -154,7 +160,27 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
             # print("earliest_date: ", earliest_date)
             # print("latest_date: ", latest_date)
             # print("relevancy score:", sim_metric)
+
+            ### Google query suggestion API 
+
     return links_list
+
+def suggestedqs(in_prompt):
+    url = "http://suggestqueries.google.com/complete/search"
+    suggested = []
+    topic = in_prompt
+
+     # Suggested questions
+    params = {
+        "client" : "chrome",
+        "q": {topic},
+        "hl": "en"
+    }
+    r = requests.get(url, params = params)
+    print("Here are the suggested questions:", r.json()[1][:3])
+    suggested = r.json()[1][:3]
+    print(suggested)
+    return suggested
 
 app = Flask(__name__)
 @app.route('/', methods=['POST', 'GET'])
@@ -165,9 +191,10 @@ def index():
         earliest_date = request.form['earliest_date_text'] 
         latest_date = request.form['latest_date_text'] 
         array = generate_response(task_content, domain, earliest_date, latest_date)
+        suggestions = suggestedqs(task_content)
         # print("array: ", array)
         return render_template('index.html', link1 = array[0][0], link1_text=array[0][1], link2 = array[1][0], link2_text = array[1][1], 
-                               link3 = array[2][0], link3_text = array[2][1]) 
+                               link3 = array[2][0], link3_text = array[2][1], suggestions = suggestions) 
     else:
         return render_template('index.html')
 
