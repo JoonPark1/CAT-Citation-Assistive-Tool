@@ -75,28 +75,29 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
     #might be useful to destructure contents array to variables that have well-defined names so it's clear! 
     # domain,topic = contents 
     topic=in_prompt
-    print("earliest_date_text: ", earliest_date)
-    print("latest_date_text: ", latest_date) 
+    # print("earliest_date_text: ", earliest_date)
+    # print("latest_date_text: ", latest_date) 
     resp = None 
     if earliest_date and latest_date:
-        print("get to url with both dates called!")
+        # print("get to url with both dates called!")
         phrase = f"Before:{earliest_date} After:{latest_date}" 
-        print("phrase: ", phrase)
+        # print("phrase: ", phrase)
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
     elif earliest_date: 
-        print("get to url with just earliest date called!")
+        # print("get to url with just earliest date called!")
         phrase = f"Before:{earliest_date}"
-        print("phrase: ", phrase)
+        # print("phrase: ", phrase)
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
     elif latest_date:
-        print("get to url with just latest date called!")
+        # print("get to url with just latest date called!")
         phrase = f"After:{latest_date}:" 
-        print("phrase: ", phrase)
+        # print("phrase: ", phrase)
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&dateRestrict={phrase}&siteSearch={domain}", verify=False)
         #print(resp.headers["Last Modified"])
     else: 
-        print("normal get url called!")
+        # print("normal get url called!")
         resp = requests.get(f"https://www.googleapis.com/customsearch/v1?key=AIzaSyBcD-oHPwnM6W7MpWSp2p1BHO_4ppkKUuE&cx=d44d7375edf8c41be&fields=items(link)&q={topic}&siteSearch={domain}", verify=False)
+        print("resp: ", resp)
     body = resp.json()
     searchResults = body["items"]
 
@@ -108,12 +109,14 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
     #for each link, resolve it to get web html doc and parse it using beautifulSoup module! 
     #for link in links: 
         #resolve link
+    print("links", links)
     considered = set() 
     length = len(links)
     counter = 0 
     links_list = []
     while True:
-        cur = random.randint(0, length-1)
+        # cur = random.randint(0, length-1)
+        cur = counter
         link = links[cur]
         if counter == 3:
             break 
@@ -148,8 +151,8 @@ def generate_response(in_prompt, domain, earliest_date, latest_date):
             #     sim_score_total += check_similarity(topic_token, cur_token)
             # sim_metric = get_sim_score(sim_score_total, len(doc))
             links_list.append([link, response['choices'][0]['message']['content']]) 
-            print("earliest_date: ", earliest_date)
-            print("latest_date: ", latest_date)
+            # print("earliest_date: ", earliest_date)
+            # print("latest_date: ", latest_date)
             # print("relevancy score:", sim_metric)
     return links_list
 
@@ -162,7 +165,7 @@ def index():
         earliest_date = request.form['earliest_date_text'] 
         latest_date = request.form['latest_date_text'] 
         array = generate_response(task_content, domain, earliest_date, latest_date)
-        print("array: ", array)
+        # print("array: ", array)
         return render_template('index.html', link1 = array[0][0], link1_text=array[0][1], link2 = array[1][0], link2_text = array[1][1], 
                                link3 = array[2][0], link3_text = array[2][1]) 
     else:
