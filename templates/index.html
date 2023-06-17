@@ -46,21 +46,26 @@
 
     </script>
 </form>
-<h4>Look for the output below...</h4>
-<h5> {{link1}}</h5> </br> 
-<!-- <h6><p class="desc">Relevancy Score: </p>{{link1_score}}</h6> -->
-<p>{{link1_text}}</p>
-<h5> {{link2}}</h5>
-<!-- <h6><p class="desc">Relevancy Score: </p>{{link2_score}}</h6> -->
-<p>{{link2_text}}</p>
-<h5> {{link3}}</h5>
-<!-- <h6><p class="desc">Relevancy Score: </p>{{link3_score}}</h6> -->
-<p>{{link3_text}}</p>
 
-<h4>Here are some other suggested topics</h4>
-<p>1. {{suggestions[0]}}</p>
-<p>2. {{suggestions[1]}}</p>
-<p>3. {{suggestions[2]}}</p>
+  <div class="a">
+    <h4>Look for the output below...</h4>
+    <h5> {{link1}}</h5> </br> 
+    <!-- <h6><p class="desc">Relevancy Score: </p>{{link1_score}}</h6> -->
+    <p style="border-width:3px; border-style:solid; border-color:#ffffff">{{link1_text}}</p>
+    <h5> {{link2}}</h5>
+    <!-- <h6><p class="desc">Relevancy Score: </p>{{link2_score}}</h6> -->
+    <p style="border-width:3px; border-style:solid; border-color:#ffffff">{{link2_text}}</p>
+    <h5> {{link3}}</h5>
+    <!-- <h6><p class="desc">Relevancy Score: </p>{{link3_score}}</h6> -->
+    <p style="border-width:3px; border-style:solid; border-color:#ffffff">{{link3_text}}</p>
+    
+    <h4>Here are some other suggested topics</h4>
+      <div class="p">
+        <p>1. {{suggestions[0]}}</p>
+        <p>2. {{suggestions[1]}}</p>
+        <p>3. {{suggestions[2]}}</p>
+      </div>
+  </div>
 
 {% endblock %}
 <br /> <br />
